@@ -4,32 +4,928 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>风尚志 | 最新时尚趋势与搭配指南</title>
-    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* 基础重置和变量 */
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #ffffff;
+            --accent-color: #B76E79;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333333;
+            --text-color: #333333;
+            --heading-font: 'Playfair Display', serif;
+            --body-font: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--body-font);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: var(--secondary-color);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-family: var(--heading-font);
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .nav-menu ul {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-menu ul li {
+            margin-left: 2rem;
+        }
+
+        .nav-menu ul li a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-menu ul li a:hover,
+        .nav-menu ul li a.active {
+            color: var(--accent-color);
+        }
+
+        .nav-menu ul li a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+
+        .search-icon {
+            cursor: pointer;
+            color: var(--dark-gray);
+            transition: color 0.3s ease;
+        }
+
+        .search-icon:hover {
+            color: var(--accent-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--dark-gray);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* 页面内容区域 */
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        /* 首页内容 */
+        /* 大图横幅 */
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3)), 
+                        url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 80px;
+            color: var(--secondary-color);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .hero-title {
+            font-family: var(--heading-font);
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent-color);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 精选文章 */
+        .featured-posts {
+            padding: 5rem 0;
+            background-color: var(--secondary-color);
+        }
+
+        .section-title {
+            font-family: var(--heading-font);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .post-card {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .post-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-image {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .post-content {
+            padding: 1.5rem;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .category {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .date {
+            color: var(--dark-gray);
+        }
+
+        .post-title {
+            font-family: var(--heading-font);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-title a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+
+        .post-title a:hover {
+            color: var(--accent-color);
+        }
+
+        .post-excerpt {
+            color: var(--dark-gray);
+            font-size: 0.95rem;
+        }
+
+        /* 分类浏览 */
+        .categories {
+            padding: 5rem 0;
+            background-color: var(--light-gray);
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-item {
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            height: 300px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-item:hover {
+            transform: scale(1.03);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .category-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .category-overlay:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .category-overlay h3 {
+            color: white;
+            font-family: var(--heading-font);
+            font-size: 1.8rem;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 文章详情页面 */
+        .post-detail {
+            padding: 100px 0 50px;
+        }
+
+        .post-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .post-detail .post-title {
+            font-family: var(--heading-font);
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .post-detail .post-meta {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-bottom: 2rem;
+        }
+
+        .post-detail .post-meta .category {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .post-featured-image {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .post-featured-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .post-detail .post-content {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 0 1rem;
+        }
+
+        .post-detail .post-content h2 {
+            font-family: var(--heading-font);
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary-color);
+        }
+
+        .post-detail .post-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .post-content blockquote {
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem 1.5rem;
+            margin: 2rem 0;
+            background-color: var(--light-gray);
+            font-style: italic;
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content blockquote cite {
+            display: block;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .post-image-full {
+            width: 100%;
+            margin: 2rem 0;
+        }
+
+        .post-image-full img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .post-tags {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            padding: 0 1rem;
+        }
+
+        .post-tags span {
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+
+        .post-tags a {
+            display: inline-block;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            text-decoration: none;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .post-tags a:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .post-share {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 0 1rem;
+            border-top: 1px solid var(--medium-gray);
+            padding-top: 2rem;
+        }
+
+        .post-share span {
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+
+        .share-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .share-btn:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .related-posts {
+            padding: 3rem 0;
+            background-color: var(--light-gray);
+        }
+
+        /* 分类页面 */
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 0 60px;
+            margin-top: 80px;
+        }
+
+        .page-title {
+            font-family: var(--heading-font);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        /* 文章列表 */
+        .posts-list {
+            padding: 3rem 0;
+        }
+
+        .posts-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .post-list-item {
+            display: flex;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .post-list-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-thumbnail {
+            flex: 1;
+            min-height: 250px;
+        }
+
+        .post-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .post-list-item .post-content {
+            flex: 2;
+            padding: 1.5rem;
+        }
+
+        .post-list-item .post-content .post-meta {
+            justify-content: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .post-list-item .post-content .post-title {
+            font-family: var(--heading-font);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-list-item .post-content .post-title a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+
+        .post-list-item .post-content .post-title a:hover {
+            color: var(--accent-color);
+        }
+
+        .post-list-item .post-content .post-excerpt {
+            color: var(--dark-gray);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .read-more {
+            display: inline-block;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .read-more::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .read-more:hover::after {
+            width: 100%;
+        }
+
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .page-link:hover,
+        .page-link.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* 关于我们页面 */
+        .about-hero {
+            height: 70vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1494972308805-463bc619d34e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 80px;
+            color: var(--secondary-color);
+        }
+
+        .about-hero-content {
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .about-hero-title {
+            font-family: var(--heading-font);
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .about-hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .about-content {
+            padding: 5rem 0;
+        }
+
+        .about-text {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 0 1rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .team-section {
+            padding: 3rem 0;
+            background-color: var(--light-gray);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-member {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .member-image {
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .member-info {
+            padding: 1.5rem;
+        }
+
+        .member-name {
+            font-family: var(--heading-font);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            color: var(--accent-color);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .member-bio {
+            color: var(--dark-gray);
+            font-size: 0.95rem;
+        }
+
+        /* 底部 */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3,
+        .footer-section h4 {
+            font-family: var(--heading-font);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: #ccc;
+            line-height: 1.8;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            text-decoration: none;
+            color: #ccc;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin-right: 1rem;
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 992px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .post-title {
+                font-size: 2.3rem;
+            }
+            
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .about-hero-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: white;
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 2rem 0;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-menu ul {
+                flex-direction: column;
+            }
+            
+            .nav-menu ul li {
+                margin: 1.5rem 0;
+            }
+            
+            .hero {
+                height: 70vh;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .post-list-item {
+                flex-direction: column;
+            }
+            
+            .post-thumbnail {
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .btn-primary {
+                padding: 10px 20px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .post-card {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- 导航栏 -->
     <header class="navbar">
         <div class="container">
             <div class="logo">
-                <h1>风尚志</h1>
+                <h1 id="home-link">风尚志</h1>
             </div>
             <nav class="nav-menu">
                 <ul>
-                    <li><a href="index.html" class="active">首页</a></li>
-                    <li><a href="category.html">时尚趋势</a></li>
-                    <li><a href="category.html">搭配指南</a></li>
-                    <li><a href="category.html">品牌资讯</a></li>
-                    <li><a href="about.html">关于我们</a></li>
+                    <li><a id="nav-home" class="nav-link active">首页</a></li>
+                    <li><a id="nav-trends" class="nav-link">时尚趋势</a></li>
+                    <li><a id="nav-guides" class="nav-link">搭配指南</a></li>
+                    <li><a id="nav-brands" class="nav-link">品牌资讯</a></li>
+                    <li><a id="nav-about" class="nav-link">关于我们</a></li>
                 </ul>
             </nav>
-            <div class="search-icon">
+            <div class="search-icon" id="search-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
             </div>
-            <div class="menu-toggle">
+            <div class="menu-toggle" id="menu-toggle">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -37,96 +933,388 @@
         </div>
     </header>
 
-    <!-- 主要内容 -->
+    <!-- 页面内容 -->
     <main>
-        <!-- 大图横幅 -->
-        <section class="hero">
-            <div class="hero-content">
-                <h2 class="hero-title">2025春夏流行趋势</h2>
-                <p class="hero-subtitle">探索最新时尚风向，发现属于你的独特风格</p>
-                <a href="post.html" class="btn-primary">查看详情</a>
-            </div>
-        </section>
-
-        <!-- 精选文章 -->
-        <section class="featured-posts">
-            <div class="container">
-                <h2 class="section-title">精选推荐</h2>
-                <div class="posts-grid">
-                    <article class="post-card">
-                        <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');"></div>
-                        <div class="post-content">
-                            <div class="post-meta">
-                                <span class="category">搭配指南</span>
-                                <span class="date">2025年11月15日</span>
-                            </div>
-                            <h3 class="post-title"><a href="post.html">五种经典黑白搭配法则</a></h3>
-                            <p class="post-excerpt">掌握这些永恒的搭配技巧，让你在任何场合都能展现优雅魅力。</p>
-                        </div>
-                    </article>
-
-                    <article class="post-card">
-                        <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');"></div>
-                        <div class="post-content">
-                            <div class="post-meta">
-                                <span class="category">时尚趋势</span>
-                                <span class="date">2025年11月12日</span>
-                            </div>
-                            <h3 class="post-title"><a href="post.html">本季必备的十款手袋</a></h3>
-                            <p class="post-excerpt">从经典款到设计师新品，为你精选本季最值得投资的手袋。</p>
-                        </div>
-                    </article>
-
-                    <article class="post-card">
-                        <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1591369822091-7cdeece942df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80');"></div>
-                        <div class="post-content">
-                            <div class="post-meta">
-                                <span class="category">美妆技巧</span>
-                                <span class="date">2025年11月10日</span>
-                            </div>
-                            <h3 class="post-title"><a href="post.html">秋冬妆容趋势解析</a></h3>
-                            <p class="post-excerpt">打造温暖而精致的秋冬妆容，让你在这个季节依然光彩照人。</p>
-                        </div>
-                    </article>
+        <!-- 首页内容 -->
+        <section id="home-page" class="page-content active">
+            <!-- 大图横幅 -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h2 class="hero-title">2025春夏流行趋势</h2>
+                    <p class="hero-subtitle">探索最新时尚风向，发现属于你的独特风格</p>
+                    <a class="btn-primary post-link" data-post="黑白搭配">查看详情</a>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- 分类浏览 -->
-        <section class="categories">
-            <div class="container">
-                <h2 class="section-title">时尚分类</h2>
-                <div class="category-grid">
-                    <div class="category-item">
-                        <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');">
-                            <div class="category-overlay">
-                                <h3>春季搭配</h3>
+            <!-- 精选文章 -->
+            <section class="featured-posts">
+                <div class="container">
+                    <h2 class="section-title">精选推荐</h2>
+                    <div class="posts-grid">
+                        <article class="post-card post-link" data-post="黑白搭配">
+                            <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');"></div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">搭配指南</span>
+                                    <span class="date">2025年11月15日</span>
+                                </div>
+                                <h3 class="post-title">五种经典黑白搭配法则</h3>
+                                <p class="post-excerpt">掌握这些永恒的搭配技巧，让你在任何场合都能展现优雅魅力。</p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="category-item">
-                        <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1036&q=80');">
-                            <div class="category-overlay">
-                                <h3>夏季清爽</h3>
+                        </article>
+
+                        <article class="post-card post-link" data-post="手袋">
+                            <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');"></div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">时尚趋势</span>
+                                    <span class="date">2025年11月12日</span>
+                                </div>
+                                <h3 class="post-title">本季必备的十款手袋</h3>
+                                <p class="post-excerpt">从经典款到设计师新品，为你精选本季最值得投资的手袋。</p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="category-item">
-                        <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1578932424967-7b682dc4c6d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');">
-                            <div class="category-overlay">
-                                <h3>秋季优雅</h3>
+                        </article>
+
+                        <article class="post-card post-link" data-post="妆容">
+                            <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1591369822091-7cdeece942df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80');"></div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">美妆技巧</span>
+                                    <span class="date">2025年11月10日</span>
+                                </div>
+                                <h3 class="post-title">秋冬妆容趋势解析</h3>
+                                <p class="post-excerpt">打造温暖而精致的秋冬妆容，让你在这个季节依然光彩照人。</p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="category-item">
-                        <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1603252109641-78c57028eacb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');">
-                            <div class="category-overlay">
-                                <h3>冬季保暖</h3>
-                            </div>
-                        </div>
+                        </article>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- 分类浏览 -->
+            <section class="categories">
+                <div class="container">
+                    <h2 class="section-title">时尚分类</h2>
+                    <div class="category-grid">
+                        <div class="category-item category-link" data-category="时尚趋势">
+                            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');">
+                                <div class="category-overlay">
+                                    <h3>春季搭配</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="category-item category-link" data-category="搭配指南">
+                            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1036&q=80');">
+                                <div class="category-overlay">
+                                    <h3>夏季清爽</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="category-item category-link" data-category="品牌资讯">
+                            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1578932424967-7b682dc4c6d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');">
+                                <div class="category-overlay">
+                                    <h3>秋季优雅</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="category-item category-link" data-category="美妆技巧">
+                            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1603252109641-78c57028eacb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');">
+                                <div class="category-overlay">
+                                    <h3>冬季保暖</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- 文章详情页面 -->
+        <section id="post-page" class="page-content">
+            <article class="post-detail">
+                <div class="container">
+                    <header class="post-header">
+                        <h1 class="post-title" id="post-title">五种经典黑白搭配法则</h1>
+                        <div class="post-meta">
+                            <span class="author">作者：时尚编辑</span>
+                            <span class="date">发布于 2025年11月15日</span>
+                            <span class="category" id="post-category">搭配指南</span>
+                        </div>
+                    </header>
+
+                    <div class="post-featured-image">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="黑白搭配" id="post-image">
+                    </div>
+
+                    <div class="post-content" id="post-content">
+                        <p>黑白搭配是时尚界永恒的经典，它简洁而不简单，优雅而不失个性。无论你是时尚新手还是资深达人，掌握黑白搭配的基本法则都能让你在任何场合都散发出迷人的魅力。</p>
+
+                        <h2>1. 经典对比法</h2>
+                        <p>黑白对比是最直接也是最具冲击力的搭配方式。通过强烈的明暗对比，可以营造出鲜明的视觉效果。比如一件白色的衬衫搭配黑色的西装裤，或者一条黑色的连衣裙配上白色的外套。</p>
+
+                        <h2>2. 层次渐变法</h2>
+                        <p>利用不同深浅的灰色作为过渡，可以让整体造型更加丰富。在黑白之间加入浅灰、中灰或深灰的单品，能够打破单调，增加层次感。例如，黑色上衣搭配深灰色裤子，再披上一件浅灰色大衣。</p>
+
+                        <div class="post-image-full">
+                            <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="层次搭配">
+                        </div>
+
+                        <h2>3. 材质混搭法</h2>
+                        <p>通过不同材质的组合来增加视觉趣味。丝绸的光滑、棉麻的质朴、皮革的光泽，每种材质都有其独特的质感。将不同材质的黑白单品组合在一起，可以创造出丰富的触觉和视觉体验。</p>
+
+                        <h2>4. 图案点缀法</h2>
+                        <p>在基础的黑白搭配中加入条纹、波点或几何图案，可以让整体造型更加生动有趣。但要注意控制图案的比例和分布，避免过于繁杂。</p>
+
+                        <h2>5. 配饰提亮法</h2>
+                        <p>通过金属饰品、彩色包包或鞋子等配饰来打破黑白的沉闷感。一个小巧的金色项链、一只红色的手包或一双裸色的高跟鞋，都能成为整体造型的亮点。</p>
+
+                        <blockquote>
+                            <p>"黑白搭配的魅力在于它的无限可能性。看似简单的两种颜色，却能创造出千变万化的时尚造型。"</p>
+                            <cite>- 时尚总监 Anna Wintour</cite>
+                        </blockquote>
+
+                        <p>掌握了这五种黑白搭配法则，你就能轻松应对各种场合的穿搭需求。记住，时尚不是盲目追随潮流，而是找到适合自己的风格，并自信地展现出来。</p>
+                    </div>
+
+                    <div class="post-tags">
+                        <span>标签：</span>
+                        <a href="#">黑白搭配</a>
+                        <a href="#">经典时尚</a>
+                        <a href="#">穿搭技巧</a>
+                        <a href="#">日常搭配</a>
+                    </div>
+
+                    <div class="post-share">
+                        <span>分享到：</span>
+                        <a href="#" class="share-btn">微博</a>
+                        <a href="#" class="share-btn">微信</a>
+                        <a href="#" class="share-btn">小红书</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 相关文章 -->
+            <section class="related-posts">
+                <div class="container">
+                    <h2 class="section-title">相关文章</h2>
+                    <div class="posts-grid">
+                        <article class="post-card post-link" data-post="手袋">
+                            <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');"></div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">时尚趋势</span>
+                                    <span class="date">2025年11月12日</span>
+                                </div>
+                                <h3 class="post-title">本季必备的十款手袋</h3>
+                                <p class="post-excerpt">从经典款到设计师新品，为你精选本季最值得投资的手袋。</p>
+                            </div>
+                        </article>
+
+                        <article class="post-card post-link" data-post="妆容">
+                            <div class="post-image" style="background-image: url('https://images.unsplash.com/photo-1591369822091-7cdeece942df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80');"></div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">美妆技巧</span>
+                                    <span class="date">2025年11月10日</span>
+                                </div>
+                                <h3 class="post-title">秋冬妆容趋势解析</h3>
+                                <p class="post-excerpt">打造温暖而精致的秋冬妆容，让你在这个季节依然光彩照人。</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- 分类页面 -->
+        <section id="category-page" class="page-content">
+            <!-- 页面标题 -->
+            <section class="page-header">
+                <div class="container">
+                    <h1 class="page-title" id="category-title">时尚趋势</h1>
+                    <p class="page-subtitle">探索最新时尚风向，发现属于你的独特风格</p>
+                </div>
+            </section>
+
+            <!-- 文章列表 -->
+            <section class="posts-list">
+                <div class="container">
+                    <div class="posts-container">
+                        <!-- 文章 1 -->
+                        <article class="post-list-item post-link" data-post="春夏趋势">
+                            <div class="post-thumbnail">
+                                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="2025春夏流行趋势">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">时尚趋势</span>
+                                    <span class="date">2025年11月15日</span>
+                                </div>
+                                <h2 class="post-title">2025春夏流行趋势解析</h2>
+                                <p class="post-excerpt">本季的流行趋势充满了惊喜，从色彩到剪裁都有哪些值得关注的亮点？让我们一起来看看...</p>
+                                <a class="read-more">阅读全文</a>
+                            </div>
+                        </article>
+
+                        <!-- 文章 2 -->
+                        <article class="post-list-item post-link" data-post="黑白搭配">
+                            <div class="post-thumbnail">
+                                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="五种经典黑白搭配法则">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">搭配指南</span>
+                                    <span class="date">2025年11月12日</span>
+                                </div>
+                                <h2 class="post-title">五种经典黑白搭配法则</h2>
+                                <p class="post-excerpt">黑白搭配是时尚界永恒的经典，掌握这些法则让你在任何场合都能展现优雅魅力...</p>
+                                <a class="read-more">阅读全文</a>
+                            </div>
+                        </article>
+
+                        <!-- 文章 3 -->
+                        <article class="post-list-item post-link" data-post="手袋">
+                            <div class="post-thumbnail">
+                                <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="本季必备的十款手袋">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">品牌资讯</span>
+                                    <span class="date">2025年11月10日</span>
+                                </div>
+                                <h2 class="post-title">本季必备的十款手袋</h2>
+                                <p class="post-excerpt">从经典款到设计师新品，为你精选本季最值得投资的手袋，提升你的整体造型...</p>
+                                <a class="read-more">阅读全文</a>
+                            </div>
+                        </article>
+
+                        <!-- 文章 4 -->
+                        <article class="post-list-item post-link" data-post="妆容">
+                            <div class="post-thumbnail">
+                                <img src="https://images.unsplash.com/photo-1591369822091-7cdeece942df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80" alt="秋冬妆容趋势解析">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">美妆技巧</span>
+                                    <span class="date">2025年11月8日</span>
+                                </div>
+                                <h2 class="post-title">秋冬妆容趋势解析</h2>
+                                <p class="post-excerpt">打造温暖而精致的秋冬妆容，让你在这个季节依然光彩照人，掌握这些技巧...</p>
+                                <a class="read-more">阅读全文</a>
+                            </div>
+                        </article>
+
+                        <!-- 文章 5 -->
+                        <article class="post-list-item post-link" data-post="春季搭配">
+                            <div class="post-thumbnail">
+                                <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="春季搭配指南">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">搭配指南</span>
+                                    <span class="date">2025年11月5日</span>
+                                </div>
+                                <h2 class="post-title">春季轻盈搭配指南</h2>
+                                <p class="post-excerpt">春天是万物复苏的季节，如何用轻盈的搭配展现春日活力？这里有你需要的灵感...</p>
+                                <a class="read-more">阅读全文</a>
+                            </div>
+                        </article>
+
+                        <!-- 文章 6 -->
+                        <article class="post-list-item post-link" data-post="夏日穿搭">
+                            <div class="post-thumbnail">
+                                <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1036&q=80" alt="夏日清爽穿搭">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">时尚趋势</span>
+                                    <span class="date">2025年11月2日</span>
+                                </div>
+                                <h2 class="post-title">夏日清爽穿搭法则</h2>
+                                <p class="post-excerpt">炎炎夏日如何穿得既清爽又时尚？这些搭配技巧让你轻松应对高温天气...</p>
+                                <a class="read-more">阅读全文</a>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- 分页 -->
+                    <div class="pagination">
+                        <a class="page-link active">1</a>
+                        <a class="page-link">2</a>
+                        <a class="page-link">3</a>
+                        <a class="page-link">下一页</a>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- 关于我们页面 -->
+        <section id="about-page" class="page-content">
+            <!-- 关于我们横幅 -->
+            <section class="about-hero">
+                <div class="about-hero-content">
+                    <h1 class="about-hero-title">关于我们</h1>
+                    <p class="about-hero-subtitle">探索时尚，发现自我，创造美丽</p>
+                </div>
+            </section>
+
+            <!-- 关于内容 -->
+            <section class="about-content">
+                <div class="container">
+                    <p class="about-text">
+                        风尚志成立于2020年，是一个专注于时尚趋势、搭配指南和品牌资讯的在线平台。我们致力于为时尚爱好者提供最新、最全面的时尚信息，帮助每个人发现并塑造独特的个人风格。
+                    </p>
+                    <p class="about-text">
+                        我们的团队由一群热爱时尚的专业人士组成，包括时尚编辑、造型师、摄影师和设计师。我们相信时尚不仅仅是外表的装饰，更是一种生活态度和自我表达的方式。
+                    </p>
+                    <p class="about-text">
+                        在风尚志，我们关注全球时尚动态，深入分析流行趋势，提供实用的搭配建议，并分享知名品牌的故事。无论你是时尚新手还是资深达人，都能在这里找到属于自己的时尚灵感。
+                    </p>
+                </div>
+            </section>
+
+            <!-- 团队介绍 -->
+            <section class="team-section">
+                <div class="container">
+                    <h2 class="section-title">我们的团队</h2>
+                    <div class="team-grid">
+                        <div class="team-member">
+                            <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1077&q=80');"></div>
+                            <div class="member-info">
+                                <h3 class="member-name">李雅婷</h3>
+                                <p class="member-role">主编</p>
+                                <p class="member-bio">拥有十年时尚媒体经验，曾任职于多家知名时尚杂志，对全球时尚趋势有深刻洞察。</p>
+                            </div>
+                        </div>
+
+                        <div class="team-member">
+                            <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1077&q=80');"></div>
+                            <div class="member-info">
+                                <h3 class="member-name">张伟</h3>
+                                <p class="member-role">时尚编辑</p>
+                                <p class="member-bio">专业造型师，擅长色彩搭配和个性化风格塑造，拥有丰富的时尚拍摄经验。</p>
+                            </div>
+                        </div>
+
+                        <div class="team-member">
+                            <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1077&q=80');"></div>
+                            <div class="member-info">
+                                <h3 class="member-name">王思雨</h3>
+                                <p class="member-role">内容策划</p>
+                                <p class="member-bio">时尚博主，对新兴品牌和设计师有敏锐的嗅觉，擅长挖掘独特时尚元素。</p>
+                            </div>
+                        </div>
+
+                        <div class="team-member">
+                            <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1077&q=80');"></div>
+                            <div class="member-info">
+                                <h3 class="member-name">陈浩然</h3>
+                                <p class="member-role">摄影师</p>
+                                <p class="member-bio">专业时尚摄影师，作品多次在国际时尚杂志发表，擅长捕捉时尚瞬间。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </section>
     </main>
 
@@ -141,10 +1329,10 @@
                 <div class="footer-section">
                     <h4>快速链接</h4>
                     <ul>
-                        <li><a href="index.html">首页</a></li>
-                        <li><a href="category.html">时尚趋势</a></li>
-                        <li><a href="category.html">搭配指南</a></li>
-                        <li><a href="about.html">关于我们</a></li>
+                        <li><a class="footer-link" data-page="home">首页</a></li>
+                        <li><a class="footer-link" data-page="category">时尚趋势</a></li>
+                        <li><a class="footer-link" data-page="category">搭配指南</a></li>
+                        <li><a class="footer-link" data-page="about">关于我们</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -162,6 +1350,196 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // 页面切换功能
+        function showPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // 显示指定页面
+            document.getElementById(pageId).classList.add('active');
+            
+            // 更新导航栏活动状态
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // 根据页面设置导航栏活动状态
+            if (pageId === 'home-page') {
+                document.getElementById('nav-home').classList.add('active');
+            } else if (pageId === 'category-page') {
+                document.getElementById('nav-trends').classList.add('active');
+            } else if (pageId === 'about-page') {
+                document.getElementById('nav-about').classList.add('active');
+            }
+        }
+        
+        // 导航链接点击事件
+        document.getElementById('home-link').addEventListener('click', () => {
+            showPage('home-page');
+        });
+        
+        document.getElementById('nav-home').addEventListener('click', () => {
+            showPage('home-page');
+        });
+        
+        document.getElementById('nav-trends').addEventListener('click', () => {
+            document.getElementById('category-title').textContent = '时尚趋势';
+            showPage('category-page');
+        });
+        
+        document.getElementById('nav-guides').addEventListener('click', () => {
+            document.getElementById('category-title').textContent = '搭配指南';
+            showPage('category-page');
+        });
+        
+        document.getElementById('nav-brands').addEventListener('click', () => {
+            document.getElementById('category-title').textContent = '品牌资讯';
+            showPage('category-page');
+        });
+        
+        document.getElementById('nav-about').addEventListener('click', () => {
+            showPage('about-page');
+        });
+        
+        // 底部链接点击事件
+        document.querySelectorAll('.footer-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const page = e.target.getAttribute('data-page');
+                if (page === 'home') {
+                    showPage('home-page');
+                } else if (page === 'category') {
+                    document.getElementById('category-title').textContent = '时尚趋势';
+                    showPage('category-page');
+                } else if (page === 'about') {
+                    showPage('about-page');
+                }
+            });
+        });
+        
+        // 文章链接点击事件
+        document.querySelectorAll('.post-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const post = e.currentTarget.getAttribute('data-post');
+                if (post) {
+                    // 根据文章名称设置文章详情页面内容
+                    switch(post) {
+                        case '黑白搭配':
+                            document.getElementById('post-title').textContent = '五种经典黑白搭配法则';
+                            document.getElementById('post-category').textContent = '搭配指南';
+                            document.getElementById('post-image').src = 'https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80';
+                            break;
+                        case '手袋':
+                            document.getElementById('post-title').textContent = '本季必备的十款手袋';
+                            document.getElementById('post-category').textContent = '时尚趋势';
+                            document.getElementById('post-image').src = 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80';
+                            break;
+                        case '妆容':
+                            document.getElementById('post-title').textContent = '秋冬妆容趋势解析';
+                            document.getElementById('post-category').textContent = '美妆技巧';
+                            document.getElementById('post-image').src = 'https://images.unsplash.com/photo-1591369822091-7cdeece942df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80';
+                            break;
+                        case '春夏趋势':
+                            document.getElementById('post-title').textContent = '2025春夏流行趋势解析';
+                            document.getElementById('post-category').textContent = '时尚趋势';
+                            document.getElementById('post-image').src = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80';
+                            break;
+                        case '春季搭配':
+                            document.getElementById('post-title').textContent = '春季轻盈搭配指南';
+                            document.getElementById('post-category').textContent = '搭配指南';
+                            document.getElementById('post-image').src = 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80';
+                            break;
+                        case '夏日穿搭':
+                            document.getElementById('post-title').textContent = '夏日清爽穿搭法则';
+                            document.getElementById('post-category').textContent = '时尚趋势';
+                            document.getElementById('post-image').src = 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1036&q=80';
+                            break;
+                    }
+                    showPage('post-page');
+                }
+            });
+        });
+        
+        // 分类链接点击事件
+        document.querySelectorAll('.category-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const category = e.currentTarget.getAttribute('data-category');
+                if (category) {
+                    document.getElementById('category-title').textContent = category;
+                    showPage('category-page');
+                }
+            });
+        });
+        
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // 关闭移动端菜单 when clicking outside
+        document.addEventListener('click', (event) => {
+            const isClickInsideNav = navMenu.contains(event.target) || menuToggle.contains(event.target);
+            
+            if (!isClickInsideNav && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+            }
+        });
+        
+        // 搜索功能（模拟）
+        const searchIcon = document.getElementById('search-icon');
+        if (searchIcon) {
+            searchIcon.addEventListener('click', () => {
+                const searchTerm = prompt('请输入搜索关键词：');
+                if (searchTerm) {
+                    alert(`搜索功能正在开发中，您搜索的关键词是：${searchTerm}`);
+                }
+            });
+        }
+        
+        // 分享功能（模拟）
+        const shareButtons = document.querySelectorAll('.share-btn');
+        shareButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const platform = button.textContent;
+                alert(`分享到${platform}功能正在开发中`);
+            });
+        });
+        
+        // 页码切换效果
+        const pageLinks = document.querySelectorAll('.page-link');
+        pageLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // 移除所有活动状态
+                pageLinks.forEach(l => l.classList.remove('active'));
+                
+                // 添加当前点击的活动状态
+                link.classList.add('active');
+                
+                // 模拟页面加载
+                const pageNumber = link.textContent;
+                console.log(`切换到第${pageNumber}页`);
+            });
+        });
+        
+        // 团队成员悬停效果增强
+        const teamMembers = document.querySelectorAll('.team-member');
+        teamMembers.forEach(member => {
+            member.addEventListener('mouseenter', () => {
+                member.style.transform = 'translateY(-10px)';
+            });
+            
+            member.addEventListener('mouseleave', () => {
+                member.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
 </body>
 </html>
